@@ -3,9 +3,12 @@
 #include <iostream>
 #include <math.h>
 
+#include "sha2.h"
+
 const char* POSSIBLE_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 const int POSSIBLE_CHAR_COUNT = strlen(POSSIBLE_CHARS);
-int HASH_LENGTH;
+const int SAMPLE_SIZE = 3;
+int PLAINTEXT_LENGTH;
 
 std::chrono::high_resolution_clock::time_point getTime() {
     return std::chrono::high_resolution_clock::now();
@@ -17,22 +20,18 @@ long long getTimeDiff(
     return std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count();
 }
 
-void findAllPermutations(const char* hash, int current_char, const char current[]) {
-    if (current_char == HASH_LENGTH) {
-        if (strncmp(hash, current, HASH_LENGTH) == 0) {
-        }
+void findAllPermutations(const unsigned char* hash, int current_char, unsigned char current[], unsigned char digest[]) {
+    if (current_char == PLAINTEXT_LENGTH) {
+	sha256(current, PLAINTEXT_LENGTH, digest);
+
+	if (memcmp(hash, digest, 32) == 0) {
+	    std::cout << "Match!\n";
+	}
     } else {
-        char new_str[current_char + 1];
         for (int i=0; i<POSSIBLE_CHAR_COUNT; i++) {
-            // Better preformance was found with a loop instead of:
-            // strncpy(new_str, current, current_char);
-            for (int j=0; j<current_char; j++) {
-                new_str[j] = current[j];
-            }
+            current[current_char] = POSSIBLE_CHARS[i];
 
-            new_str[current_char] = POSSIBLE_CHARS[i];
-
-            findAllPermutations(hash, current_char + 1, new_str); 
+            findAllPermutations(hash, current_char + 1, current, digest); 
         }
     }
 }
@@ -44,35 +43,22 @@ int main(int argc, char** args) {
         return 1;
     }
 
-    /*
-    HASH_LENGTH = strlen(args[1]);
-    const char* hash = args[1];
-    const char blank[HASH_LENGTH] = {};
 
-    auto start_time = getTime();
-    findAllPermutations(hash, 0, blank);
+    PLAINTEXT_LENGTH = strlen(args[1]);
 
-    auto stop_time = getTime();
-    long long duration = getTimeDiff(start_time, stop_time);
+    // calculate the hash of the input string
+    const unsigned char* plaintext = reinterpret_cast<const unsigned char *>(args[1]);
+    unsigned char hash[32] = {0};
+    sha256(plaintext, PLAINTEXT_LENGTH, hash);
 
-    std::cout << std::fixed;
-    std::cout << duration << "\u03BCs elapsed.\n";
-
-    float seconds = duration / 1000000.0;
-    long long permutations = std::pow(POSSIBLE_CHAR_COUNT, HASH_LENGTH);
-    std::cout << permutations / seconds << " attempts per second.\n";
-    */
-
-    HASH_LENGTH = strlen(args[1]);
-    const char* hash = args[1];
-    const char blank[HASH_LENGTH] = {};
+    // avoid re allocating memory by defining these here
+    unsigned char blank[PLAINTEXT_LENGTH] = {0};
+    unsigned char blank_digest[32] = {0};
 
     long long sum = 0;
-    int sample_size = 10;
-
-    for (int i=0; i<sample_size; i++) {
+    for (int i=0; i<SAMPLE_SIZE; i++) {
         auto start_time = getTime();
-        findAllPermutations(hash, 0, blank);
+        findAllPermutations(hash, 0, blank, blank_digest);
 
         auto stop_time = getTime();
         long long duration = getTimeDiff(start_time, stop_time);
@@ -80,10 +66,10 @@ int main(int argc, char** args) {
         sum += duration;
     }
 
-    sum /= sample_size;
+    sum /= SAMPLE_SIZE;
 
     float seconds = sum / 1000000.0;
-    long long permutations = std::pow(POSSIBLE_CHAR_COUNT, HASH_LENGTH);
+    long long permutations = std::pow(POSSIBLE_CHAR_COUNT, PLAINTEXT_LENGTH);
 
-    std::cout << "Averaged permutations per second: " << permutations / seconds << "\n";
+    std::cout << "Averaged hashed permutations per second: " << permutations / seconds << "\n";
 }

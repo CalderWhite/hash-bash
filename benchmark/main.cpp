@@ -25,7 +25,7 @@ void findAllPermutations(const unsigned char* hash, int current_char, unsigned c
 	sha256(current, PLAINTEXT_LENGTH, digest);
 
 	if (memcmp(hash, digest, 32) == 0) {
-	    std::cout << "Match!\n";
+	    //std::cout << "Match!\n";
 	}
     } else {
         for (int i=0; i<POSSIBLE_CHAR_COUNT; i++) {

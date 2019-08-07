@@ -1,7 +1,10 @@
 cc_library(
     name = "PTree",
     srcs = ["PTree.cpp"],
-    hdrs = ["PTree.h"],
+    hdrs = [
+        "PTree.h",
+        "PTreeException.h",
+    ],
 )
 
 cc_binary(

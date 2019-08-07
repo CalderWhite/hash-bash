@@ -5,6 +5,7 @@
 #include <math.h>
 
 #include "PTree.h"
+#include "PTreeException.h"
 
 PTree::PTree(long ss, long bs, char st)
     : m_char_set_size(ss), m_block_size(bs), m_ascii_start(st) {
@@ -18,17 +19,10 @@ PTree::PTree(long ss, long bs, char st)
 }
 
 PTree::~PTree() {
-
-    std::cout << "Deleted!\n";
+    deallocateCountTableArrays();
 }
 
-PTree::PTree(const PTree& p) {
-    m_char_set_size = p.m_char_set_size;
-    m_block_size = p.m_block_size;
-    m_ascii_start = p.m_ascii_start;
-
-    allocateCountTableArrays();
-
+PTree::PTree(const PTree& p) : PTree(p.m_char_set_size, p.m_block_size, p.m_ascii_start) {
     // TODO test this feature
     for (int i=0; i<m_block_size; i++) {
         std::copy(p.m_count_table[i], p.m_count_table[i] + p.getCountLength(i),
@@ -36,9 +30,8 @@ PTree::PTree(const PTree& p) {
     }
 }
 
-PTree& PTree::operator= (const PTree& ptree) {
-    static PTree p(ptree);
-    return p;
+PTree& PTree::operator= (const PTree& p) {
+    return *this;
 }
 
 /**
@@ -48,7 +41,7 @@ PTree& PTree::operator= (const PTree& ptree) {
  */
 void PTree::addStr(char s[]) {
     if (strlen(s) != m_block_size) {
-        throw std::runtime_error("Input string did not match block size!");
+        throw PTreeException("Input string did not match block size!");
     }
 
     for (int i=0; i<m_block_size; i++) {
@@ -57,14 +50,13 @@ void PTree::addStr(char s[]) {
             index += (s[j] - m_ascii_start) * getCountBlockSize(i-j);
         }
 
-        //m_count_table[i][index] = s[i] - m_ascii_start;
         ++m_count_table[i][index];
     }
 }
 
 void PTree::mergeTree(PTree const& p) {
     if (p.m_block_size != m_block_size) {
-        throw std::runtime_error("Mismatched block sizes in attempted tree merge!");
+        throw PTreeException("Mismatched block sizes in attempted tree merge!");
     }
 
     for (int depth=0; depth<m_block_size; depth++) {
@@ -81,10 +73,8 @@ void PTree::allocateCountTableArrays() {
             m_count_table[i] = new int[getCountLength(i)];
         }
     } catch (std::bad_alloc) {
-        std::cerr << "Error: Failed to allocate memory for count table!\n";
         deallocateCountTableArrays();
-
-        throw;
+        throw PTreeException("Failed to allocate memory for count table!");
     }
 }
 

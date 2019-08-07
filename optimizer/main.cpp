@@ -1,6 +1,8 @@
 #include <iostream>
+#include <exception>
 
 #include "PTree.h"
+#include "PTreeException.h"
 
 const long BLOCK_SIZE = 4;
 const long CHAR_SET_SIZE = 95;
@@ -29,6 +31,9 @@ int main() {
 
     std::cout << "Merging...\n";
     p.mergeTree(q);
+
+    std::cout << "Copying...\n";
+    PTree x = p;
 
     std::cout << "main scope ended.\n";
 }

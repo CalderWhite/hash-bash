@@ -7,7 +7,9 @@ const long CHAR_SET_SIZE = 95;
 
 int main() {
     PTree p(CHAR_SET_SIZE, BLOCK_SIZE);
+    PTree q(CHAR_SET_SIZE, BLOCK_SIZE);
 
+    std::cout << "Building...\n";
     char s[BLOCK_SIZE] = {0};
     for (int i=0; i<CHAR_SET_SIZE; i++) {
         for (int j=0; j<CHAR_SET_SIZE; j++) {
@@ -19,10 +21,14 @@ int main() {
                     s[3] = ' ' + l;
 
                     p.addStr(s);
+                    q.addStr(s);
                 }
             }
         }
     }
 
-    p.test();
+    std::cout << "Merging...\n";
+    p.mergeTree(q);
+
+    std::cout << "main scope ended.\n";
 }

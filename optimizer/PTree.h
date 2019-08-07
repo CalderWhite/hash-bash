@@ -9,8 +9,16 @@ public:
     PTree(const PTree& ptree);
     PTree& operator= (const PTree& ptree);
 
+    /*
+     * Increments the count of each character based on the tree's trie-like structure.
+     */
     void addStr(char s[]);
-    void test();
+
+    /**
+     * Merges the current count tree with the inputted PTree's count tree.
+     */
+    void mergeTree(PTree const& p);
+
 private:
     long m_char_set_size;
     long m_block_size;
@@ -28,15 +36,36 @@ private:
     int** m_count_table;
 
     /**
-     * Stores the sizes of each count table to reduce the number of powers that are calculated.
+     * Stores the powers m_char_set_size of from 0 to m_block_size 
+     */
+    long* m_powers;
+
+    /**
+     * Creates each counting array in m_count_table based on getCountLength()
+     */
+    void allocateCountTableArrays();
+
+    void deallocateCountTableArrays();
+
+    /**
+     * Util function. Returns the base^exponent for integers only.
+     */
+    long ipow(long base, long exponent) const;
+
+    /**
+     * This method is used to avoid the calculation of powers.
+     *
+     * @return The length of the m_count_table[i]
+     */
+    inline long getCountLength(int i) const;
+
+    /**
+     * Returns the length of the sub-arrays of m_count_table[i] using m_powers.
      * 0 -> 1
      * 1 -> m_char_set_size
      * 2 -> m_char_set_size^2
      * ...
      * m_block_size-1 -> m_char_set_size^(m_block_size-1)
      */
-    long* m_count_table_block_sizes;
-
-    void allocateArrays();
-    long ipow(long base, long exponent);
+    inline long getCountBlockSize(int i) const;
 };

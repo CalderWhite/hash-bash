@@ -9,21 +9,15 @@
 PTree::PTree(long ss, long bs, char st)
     : m_char_set_size(ss), m_block_size(bs), m_ascii_start(st) {
 
-    m_count_table_block_sizes = new long[m_block_size];
-    for (int i=0; i<m_block_size; i++) {
-        m_count_table_block_sizes[i] = ipow(m_char_set_size, i);
+    m_powers = new long[m_block_size+1];
+    for (int i=0; i<m_block_size+1; i++) {
+        m_powers[i] = ipow(m_char_set_size, i);
     }
 
-    allocateArrays();
+    allocateCountTableArrays();
 }
 
 PTree::~PTree() {
-    for (int i=0; i<m_block_size; i++) {
-        delete[] m_count_table[i];
-    }
-
-    delete[] m_count_table;
-    delete[] m_count_table_block_sizes;
 
     std::cout << "Deleted!\n";
 }
@@ -33,11 +27,11 @@ PTree::PTree(const PTree& p) {
     m_block_size = p.m_block_size;
     m_ascii_start = p.m_ascii_start;
 
-    allocateArrays();
+    allocateCountTableArrays();
 
     // TODO test this feature
     for (int i=0; i<m_block_size; i++) {
-        std::copy(p.m_count_table[i], p.m_count_table[i] + ipow(m_char_set_size, i+1),
+        std::copy(p.m_count_table[i], p.m_count_table[i] + p.getCountLength(i),
                   m_count_table[i]);
     }
 }
@@ -53,16 +47,14 @@ PTree& PTree::operator= (const PTree& ptree) {
  * one further down the tree.
  */
 void PTree::addStr(char s[]) {
-
     if (strlen(s) != m_block_size) {
-        std::cout << "Error: Input string did not match block size!\n";
-        throw "Input string did not match block size!\n";
+        throw std::runtime_error("Input string did not match block size!");
     }
 
     for (int i=0; i<m_block_size; i++) {
         long index = 0;
         for (int j=0; j<=i; j++) {
-            index += (s[j] - m_ascii_start) * m_count_table_block_sizes[i-j];
+            index += (s[j] - m_ascii_start) * getCountBlockSize(i-j);
         }
 
         //m_count_table[i][index] = s[i] - m_ascii_start;
@@ -70,14 +62,42 @@ void PTree::addStr(char s[]) {
     }
 }
 
-void PTree::allocateArrays() {
-    m_count_table = new int*[m_block_size];
-    for (int i=0; i<m_block_size; i++) {
-        m_count_table[i] = new int[ipow(m_char_set_size, i+1)];
+void PTree::mergeTree(PTree const& p) {
+    if (p.m_block_size != m_block_size) {
+        throw std::runtime_error("Mismatched block sizes in attempted tree merge!");
+    }
+
+    for (int depth=0; depth<m_block_size; depth++) {
+        for (int i=0; i<getCountLength(depth); i++) {
+            m_count_table[depth][i] += p.m_count_table[depth][i];
+        }
     }
 }
 
-long PTree::ipow(long base, long exponent) {
+void PTree::allocateCountTableArrays() {
+    m_count_table = new int*[m_block_size];
+    try {
+        for (int i=0; i<m_block_size; i++) {
+            m_count_table[i] = new int[getCountLength(i)];
+        }
+    } catch (std::bad_alloc) {
+        std::cerr << "Error: Failed to allocate memory for count table!\n";
+        deallocateCountTableArrays();
+
+        throw;
+    }
+}
+
+void PTree::deallocateCountTableArrays() {
+    for (int i=0; i<m_block_size; i++) {
+        delete[] m_count_table[i];
+    }
+
+    delete[] m_count_table;
+    delete[] m_powers;
+}
+
+long PTree::ipow(long base, long exponent) const {
     long c = 1;
     for (long i=0; i<exponent; i++) {
         c *= base;
@@ -86,14 +106,10 @@ long PTree::ipow(long base, long exponent) {
     return c;
 }
 
-void PTree::test() {
-    for (int i=0; i<m_block_size; i++) {
-        std::cout << "Step: " << m_count_table_block_sizes[i] << "\n";
-        for (int j=0; j<ipow(m_char_set_size, i+1); j++) {
-            //if(m_count_table[i][j] != 1)
-            //    std::cout << "Bad!\n";
-            std::cout << m_count_table[i][j] << "\n";
-        }
-        std::cout << "------------\n";
-    }
+inline long PTree::getCountLength(int i) const {
+    return m_powers[i+1];
+}
+
+inline long PTree::getCountBlockSize(int i) const {
+    return m_powers[i];
 }

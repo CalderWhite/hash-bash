@@ -7,6 +7,15 @@ cc_library(
     ],
 )
 
+cc_test(
+    name = "PTreeTests",
+    srcs = ["Ptree.test.cpp"],
+    deps = [
+        "@gtest//:main",
+        ":PTree",
+    ]
+)
+
 cc_binary(
     name = "main",
     srcs = ["main.cpp"],

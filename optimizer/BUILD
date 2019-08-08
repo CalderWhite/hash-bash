@@ -24,6 +24,7 @@ cc_test(
 cc_binary(
     name = "main",
     srcs = ["main.cpp"],
+    copts = ["-Iexternal/gtest/include"],
     deps = [
         ":PTree",
     ],

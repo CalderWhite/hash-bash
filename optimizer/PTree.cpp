@@ -35,18 +35,13 @@ PTree& PTree::operator= (const PTree& p) {
  * At each level of the tree, it increments the count of the character it is at before traversing
  * one further down the tree.
  */
-void PTree::addStr(char s[]) {
+void PTree::addStr(const char s[]) {
     if (strlen(s) != m_block_size) {
         throw PTreeException("Input string did not match block size!");
     }
 
     for (int i=0; i<m_block_size; i++) {
-        long index = 0;
-        for (int j=0; j<=i; j++) {
-            index += (s[j] - m_ascii_start) * getCountBlockSize(i-j);
-        }
-
-        ++m_count_table[i][index];
+        ++m_count_table[i][getLastOffset(s, i+1)];
     }
 }
 
@@ -60,6 +55,21 @@ void PTree::mergeTree(PTree const& p) {
             m_count_table[depth][i] += p.m_count_table[depth][i];
         }
     }
+}
+
+int PTree::getSubCount(const char* s) const {
+    const long index = getLastOffset(s, strlen(s));
+    return m_count_table[strlen(s)-1][index];
+}
+
+long PTree::getLastOffset(const char s[], int l) const {
+    // TODO any faster with formula? (Probably not, since closed form uses powers)
+    long index = 0;
+    for (int i=0; i<l; i++) {
+        index += (s[i] - m_ascii_start) * getCountBlockSize(l-i-1);
+    }
+
+    return index;
 }
 
 void PTree::initPowerArray() {

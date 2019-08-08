@@ -36,12 +36,34 @@ public:
     /*
      * Increments the count of each character based on the tree's trie-like structure.
      */
-    void addStr(char s[]);
+    void addStr(const char s[]);
 
     /**
      * Merges the current count tree with the inputted PTree's count tree.
      */
     void mergeTree(PTree const& p);
+
+    /*
+     * Finds the count of the final node in the string's tree
+     * I.e. If you were to run getSubCount("abc"):
+     *
+     * Where x reps a's count
+     * Where y reps b's count
+     * Where z reps c's count
+     *
+     * a(x) --> b(y) --> c(z)
+     *                   ^
+     *                   | this value
+     *
+     * The return value would be z.
+     */
+    int getSubCount(const char* s) const;
+
+    /**
+     * Returns the offset of the s[l-1] in m_count_table[l-1]
+     * (l-1 since the table starts at 0, but the str len starts at 1)
+     */
+    long getLastOffset(const char s[], int l) const;
 
 private:
     long m_char_set_size;

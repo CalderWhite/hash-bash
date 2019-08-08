@@ -38,7 +38,7 @@ TEST(PTree, IpowStdPow) {
     }
 }
 
-TEST(PTree, CountTableSmallTest) {
+TEST(PTree, CountTableSmall) {
     const long block_size = 4;
     const long char_set_size = 95;
     PTree p(char_set_size, block_size, ' ');
@@ -62,6 +62,46 @@ TEST(PTree, CountTableSmallTest) {
     EXPECT_EQ(1, p.getSubCount("nope"));
 
     EXPECT_EQ(1, p.getSubCount("~~~~"));
+}
+
+TEST(PTree, CountTableLarge) {
+    const long block_size = 4;
+    const long char_set_size = 95;
+    PTree p(char_set_size, block_size, ' ');
+
+
+    char s[block_size] = {0};
+    for (int i=0; i<95; i++) {
+        s[0] = ' ' + i;
+        for (int j=0; j<95; j++) {
+            s[1] = ' ' + j;
+            for (int k=0; k<95; k++) {
+                s[2] = ' ' + k;
+                for (int l=0; l<95; l++) {
+                    s[3] = ' ' + l;
+
+                    p.addStr(s);
+                }
+            }
+        }
+    }
+
+    for (int i=0; i<char_set_size; i++) {
+        s[0] = ' ' + i;
+        for (int j=0; j<char_set_size; j++) {
+            s[1] = ' ' + j;
+            for (int k=0; k<char_set_size; k++) {
+                s[2] = ' ' + k;
+
+                ASSERT_EQ(95, p.getCountAt(s, 2));
+                for (int l=0; l<char_set_size; l++) {
+                    s[3] = ' ' + l;
+
+                    ASSERT_EQ(1, p.getSubCount(s));
+                }
+            }
+        }
+    }
 }
 
 int main(int argc, char* argv[]) {

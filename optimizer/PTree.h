@@ -60,6 +60,11 @@ public:
     int getSubCount(const char* s) const;
 
     /**
+     * Similar to getSubCount(), except you can chose at what level you get the count.
+     */
+    int getCountAt(const char* s, int i) const;
+
+    /**
      * Returns the offset of the s[l-1] in m_count_table[l-1]
      * (l-1 since the table starts at 0, but the str len starts at 1)
      */

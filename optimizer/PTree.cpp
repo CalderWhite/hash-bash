@@ -62,6 +62,11 @@ int PTree::getSubCount(const char* s) const {
     return m_count_table[strlen(s)-1][index];
 }
 
+int PTree::getCountAt(const char* s, int i) const {
+    const long index = getLastOffset(s, i);
+    return m_count_table[i][index];
+}
+
 long PTree::getLastOffset(const char s[], int l) const {
     // TODO any faster with formula? (Probably not, since closed form uses powers)
     long index = 0;

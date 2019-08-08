@@ -1,5 +1,7 @@
 #pragma once
 
+#include <gtest/gtest_prod.h>
+
 /**
  * A PTree contains the counts of each character after a certain amount of characters that come before it.
  * This is found by ingesting large amounts of strings into the class using addStr().
@@ -62,6 +64,8 @@ private:
      */
     long* m_powers;
 
+    void initPowerArray();
+
     /**
      * Creates each counting array in m_count_table based on getCountLength()
      */
@@ -90,4 +94,8 @@ private:
      * m_block_size-1 -> m_char_set_size^(m_block_size-1)
      */
     inline long getCountBlockSize(int i) const;
+
+    // ============= FRIEND TESTS =============
+    FRIEND_TEST(PTree, IpowPowersOfTwo);
+    FRIEND_TEST(PTree, IpowStdPow);
 };

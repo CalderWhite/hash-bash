@@ -10,11 +10,7 @@
 PTree::PTree(long ss, long bs, char st)
     : m_char_set_size(ss), m_block_size(bs), m_ascii_start(st) {
 
-    m_powers = new long[m_block_size+1];
-    for (int i=0; i<m_block_size+1; i++) {
-        m_powers[i] = ipow(m_char_set_size, i);
-    }
-
+    initPowerArray();
     allocateCountTableArrays();
 }
 
@@ -64,6 +60,14 @@ void PTree::mergeTree(PTree const& p) {
             m_count_table[depth][i] += p.m_count_table[depth][i];
         }
     }
+}
+
+void PTree::initPowerArray() {
+    m_powers = new long[m_block_size+1];
+    for (int i=0; i<m_block_size+1; i++) {
+        m_powers[i] = ipow(m_char_set_size, i);
+    }
+
 }
 
 void PTree::allocateCountTableArrays() {

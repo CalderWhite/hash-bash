@@ -1,15 +1,20 @@
 cc_library(
     name = "PTree",
     srcs = ["PTree.cpp"],
+    copts = ["-Iexternal/gtest/include"],
     hdrs = [
         "PTree.h",
         "PTreeException.h",
     ],
+    deps = [
+        "@gtest//:main",
+    ]
 )
 
 cc_test(
     name = "PTreeTests",
-    srcs = ["Ptree.test.cpp"],
+    srcs = ["PTree.test.cpp"],
+    copts = ["-Iexternal/gtest/include"],
     deps = [
         "@gtest//:main",
         ":PTree",

@@ -1,8 +1,6 @@
 #pragma once
 
-#include <gtest/gtest_prod.h>
-
-#include "Predictor.h"
+#include "utils.h"
 
 /**
  * A PTree contains the counts of each character after a certain string of characters that come before it.
@@ -103,10 +101,6 @@ private:
 
     void deallocateCountTableArrays();
 
-    /**
-     * Util function. Returns the base^exponent for integers only.
-     */
-    long ipow(long base, long exponent) const;
 
     /**
      * This method is used to avoid the calculation of powers.
@@ -124,10 +118,4 @@ private:
      * m_block_size-1 -> m_char_set_size^(m_block_size-1)
      */
     inline long getCountBlockSize(int i) const;
-
-    // ============= FRIEND TESTS =============
-    FRIEND_TEST(PTree, IpowPowersOfTwo);
-    FRIEND_TEST(PTree, IpowStdPow);
-
-    friend class Predictor;
 };

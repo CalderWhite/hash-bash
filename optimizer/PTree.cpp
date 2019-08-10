@@ -4,6 +4,7 @@
 #include <exception>
 #include <math.h>
 
+#include "utils.h"
 #include "PTree.h"
 #include "PTreeException.h"
 
@@ -85,7 +86,7 @@ long PTree::getCharIndex(const char s[], int cindex) const {
 void PTree::initPowerArray() {
     m_powers = new long[m_block_size+1]();
     for (int i=0; i<m_block_size+1; i++) {
-        m_powers[i] = ipow(m_char_set_size, i);
+        m_powers[i] = utils::ipow(m_char_set_size, i);
     }
 
 }
@@ -111,14 +112,6 @@ void PTree::deallocateCountTableArrays() {
     delete[] m_powers;
 }
 
-long PTree::ipow(long base, long exponent) const {
-    long c = 1;
-    for (long i=0; i<exponent; i++) {
-        c *= base;
-    }
-
-    return c;
-}
 
 inline long PTree::getCountLength(int i) const {
     return m_powers[i+1];

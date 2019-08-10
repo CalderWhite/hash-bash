@@ -8,6 +8,7 @@ cc_library(
     ],
     deps = [
         "@gtest//:main",
+        ":utils",
     ]
 )
 
@@ -18,6 +19,22 @@ cc_test(
     deps = [
         "@gtest//:main",
         ":PTree",
+    ]
+)
+
+cc_library(
+    name = "utils",
+    srcs = ["utils.cpp"],
+    hdrs = ["utils.h"],
+)
+
+cc_test(
+    name = "UtilsTests",
+    srcs = ["utils.test.cpp"],
+    copts = ["-Iexternal/gtest/include"],
+    deps = [
+        "@gtest//:main",
+        ":utils",
     ]
 )
 

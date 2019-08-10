@@ -10,7 +10,6 @@
 PTree::PTree(long ss, long bs, char st)
     : m_char_set_size(ss), m_block_size(bs), m_ascii_start(st) {
 
-    std::cout << "Constructor called\n";
     initPowerArray();
     allocateCountTableArrays();
 }
@@ -110,8 +109,6 @@ void PTree::deallocateCountTableArrays() {
 
     delete[] m_count_table;
     delete[] m_powers;
-
-    std::cout << "My arrays should be gone.\n";
 }
 
 long PTree::ipow(long base, long exponent) const {

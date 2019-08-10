@@ -21,23 +21,11 @@ cc_test(
     ]
 )
 
-cc_test(
-    name = "newtest",
-    srcs = ["newtest.test.cpp"],
-    copts = ["-Iexternal/gtest/include"],
-    deps = [
-        "@gtest//:main",
-        ":PTree",
-    ]
-)
-
-
 cc_binary(
     name = "main",
     srcs = ["main.cpp"],
     copts = ["-Iexternal/gtest/include"],
     deps = [
         ":PTree",
-        "@gtest//:main",
     ],
 )

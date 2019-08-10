@@ -2,27 +2,30 @@
 
 #include <gtest/gtest_prod.h>
 
+#include "Predictor.h"
+
 /**
- * A PTree contains the counts of each character after a certain amount of characters that come before it.
+ * A PTree contains the counts of each character after a certain string of characters that come before it.
  * This is found by ingesting large amounts of strings into the class using addStr().
  *
  * Further Explanation:
  * This class is used to count the occurances of certain strings of characters.
  * This is done by creating a tree where one character leads to another, and each
  * node in the tree has a specific count associated with it.
- * For example, if you were to call addStr() on both park and pays, the tree would be as follows:
+ * For example, if you were to call addStr() on both "park" and "pays", the tree would be as follows:
  *
  * p(2) --> a(2) --> r(1) --> k(1)
  *          |
  *          +-- y(1) --> s(1)
  *
- * This structure is similar to a trie.
+ * This structure is similar to a trie. However, in a PTree, all of the different possibilities are stored.
  *
  * Parallelization:
- * The class is not designed to be operated on in parallel, however this can be accomplished with
+ * The class is not designed to be operated on in parallel. However, this can be accomplished with
  * processing sub-trees and then merging the gathered data with mergeTree().
  * i.e. : You have 1000 strings. In one thread you create a PTree and process 500. 
  *        In another you process the other 500. Then, you merge one into the other (or a main PTree).
+ *        This final tree has the same result as processing the 1000 strings serially in 1 thread.
  */
 class PTree {
 public:
@@ -125,4 +128,6 @@ private:
     // ============= FRIEND TESTS =============
     FRIEND_TEST(PTree, IpowPowersOfTwo);
     FRIEND_TEST(PTree, IpowStdPow);
+
+    friend class Predictor;
 };

@@ -36,7 +36,7 @@ public:
     /*
      * Increments the count of each character based on the tree's trie-like structure.
      */
-    void addStr(const char s[]);
+    void addStr(const char s[], int len=0);
 
     /**
      * Merges the current count tree with the inputted PTree's count tree.
@@ -68,7 +68,7 @@ public:
      * Returns the offset of the s[l-1] in m_count_table[l-1]
      * (l-1 since the table starts at 0, but the str len starts at 1)
      */
-    long getLastOffset(const char s[], int l) const;
+    long getCharIndex(const char s[], int cindex) const;
 
 private:
     long m_char_set_size;

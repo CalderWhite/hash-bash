@@ -21,7 +21,7 @@ TEST(PTree, IpowPowersOfTwo) {
  * of the standard library's pow() function.
  */
 TEST(PTree, IpowStdPow) {
-    const int test_count = 6;
+    const int test_count = 4;
     PTree p(0, 0);
 
     long bases[test_count] = {
@@ -39,8 +39,8 @@ TEST(PTree, IpowStdPow) {
 }
 
 TEST(PTree, CountTableSmall) {
-    const long block_size = 4;
-    const long char_set_size = 95;
+    long block_size = 4;
+    long char_set_size = 95;
     PTree p(char_set_size, block_size, ' ');
 
     // testing the count addition of no
@@ -65,8 +65,8 @@ TEST(PTree, CountTableSmall) {
 }
 
 TEST(PTree, CountTableLarge) {
-    const long block_size = 4;
-    const long char_set_size = 95;
+    long block_size = 3;
+    long char_set_size = 95;
     PTree p(char_set_size, block_size, ' ');
 
 
@@ -77,11 +77,7 @@ TEST(PTree, CountTableLarge) {
             s[1] = ' ' + j;
             for (int k=0; k<95; k++) {
                 s[2] = ' ' + k;
-                for (int l=0; l<95; l++) {
-                    s[3] = ' ' + l;
-
-                    p.addStr(s);
-                }
+                p.addStr(s, block_size);
             }
         }
     }
@@ -90,18 +86,31 @@ TEST(PTree, CountTableLarge) {
         s[0] = ' ' + i;
         for (int j=0; j<char_set_size; j++) {
             s[1] = ' ' + j;
+            EXPECT_EQ(95, p.getCountAt(s, 1));
             for (int k=0; k<char_set_size; k++) {
                 s[2] = ' ' + k;
 
-                ASSERT_EQ(95, p.getCountAt(s, 2));
-                for (int l=0; l<char_set_size; l++) {
-                    s[3] = ' ' + l;
-
-                    ASSERT_EQ(1, p.getSubCount(s));
-                }
+                ASSERT_EQ(1, p.getCountAt(s, 2));
             }
         }
     }
+}
+
+TEST(PTree, MergeTreeSmall) {
+    long block_size = 3;
+    long char_set_size = 95;
+    PTree p(char_set_size, block_size, ' ');
+    PTree q(char_set_size, block_size, ' ');
+
+    p.addStr("thi");
+    q.addStr("tha");
+
+    p.mergeTree(q);
+
+    EXPECT_EQ(2, p.getCountAt("t", 0));
+    EXPECT_EQ(2, p.getCountAt("th", 1));
+    EXPECT_EQ(1, p.getCountAt("thi", 2));
+    EXPECT_EQ(1, p.getCountAt("tha", 2));
 }
 
 int main(int argc, char* argv[]) {

@@ -10,6 +10,7 @@
 PTree::PTree(long ss, long bs, char st)
     : m_char_set_size(ss), m_block_size(bs), m_ascii_start(st) {
 
+    std::cout << "Constructor called\n";
     initPowerArray();
     allocateCountTableArrays();
 }
@@ -35,13 +36,17 @@ PTree& PTree::operator= (const PTree& p) {
  * At each level of the tree, it increments the count of the character it is at before traversing
  * one further down the tree.
  */
-void PTree::addStr(const char s[]) {
-    if (strlen(s) != m_block_size) {
+void PTree::addStr(const char s[], int len) {
+    if (len == 0) {
+        if (strlen(s) != m_block_size) {
+            throw PTreeException("Input string did not match block size!");
+        }
+    } else if (len != m_block_size) {
         throw PTreeException("Input string did not match block size!");
     }
 
     for (int i=0; i<m_block_size; i++) {
-        ++m_count_table[i][getLastOffset(s, i+1)];
+        ++m_count_table[i][getCharIndex(s, i)];
     }
 }
 
@@ -58,27 +63,28 @@ void PTree::mergeTree(PTree const& p) {
 }
 
 int PTree::getSubCount(const char* s) const {
-    const long index = getLastOffset(s, strlen(s));
-    return m_count_table[strlen(s)-1][index];
+    const int last_char_index = strlen(s) - 1;
+    const long index = getCharIndex(s, last_char_index);
+    return m_count_table[last_char_index][index];
 }
 
 int PTree::getCountAt(const char* s, int i) const {
-    const long index = getLastOffset(s, i);
+    const long index = getCharIndex(s, i);
     return m_count_table[i][index];
 }
 
-long PTree::getLastOffset(const char s[], int l) const {
+long PTree::getCharIndex(const char s[], int cindex) const {
     // TODO any faster with formula? (Probably not, since closed form uses powers)
     long index = 0;
-    for (int i=0; i<l; i++) {
-        index += (s[i] - m_ascii_start) * getCountBlockSize(l-i-1);
+    for (int i=0; i<=cindex; i++) {
+        index += (s[i] - m_ascii_start) * getCountBlockSize(cindex-i);
     }
 
     return index;
 }
 
 void PTree::initPowerArray() {
-    m_powers = new long[m_block_size+1];
+    m_powers = new long[m_block_size+1]();
     for (int i=0; i<m_block_size+1; i++) {
         m_powers[i] = ipow(m_char_set_size, i);
     }
@@ -86,10 +92,10 @@ void PTree::initPowerArray() {
 }
 
 void PTree::allocateCountTableArrays() {
-    m_count_table = new int*[m_block_size];
+    m_count_table = new int*[m_block_size]();
     try {
         for (int i=0; i<m_block_size; i++) {
-            m_count_table[i] = new int[getCountLength(i)];
+            m_count_table[i] = new int[getCountLength(i)]();
         }
     } catch (std::bad_alloc) {
         deallocateCountTableArrays();
@@ -104,6 +110,8 @@ void PTree::deallocateCountTableArrays() {
 
     delete[] m_count_table;
     delete[] m_powers;
+
+    std::cout << "My arrays should be gone.\n";
 }
 
 long PTree::ipow(long base, long exponent) const {

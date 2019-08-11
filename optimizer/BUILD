@@ -9,6 +9,7 @@ cc_library(
     deps = [
         "@gtest//:main",
         ":utils",
+        ":BigTree",
     ]
 )
 
@@ -38,11 +39,22 @@ cc_test(
     ]
 )
 
+cc_library(
+    name = "BigTree",
+    hdrs = [
+        "BigTree.h",
+        "BigTreeException.h",
+    ],
+    deps = [
+        ":utils",
+    ]
+)
+
 cc_binary(
     name = "main",
     srcs = ["main.cpp"],
     copts = ["-Iexternal/gtest/include"],
     deps = [
-        ":PTree",
+        ":BigTree",
     ],
 )

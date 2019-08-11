@@ -9,26 +9,7 @@
 #include "PTreeException.h"
 
 PTree::PTree(long ss, long bs, char st)
-    : m_char_set_size(ss), m_block_size(bs), m_ascii_start(st) {
-
-    initPowerArray();
-    allocateCountTableArrays();
-}
-
-PTree::~PTree() {
-    deallocateCountTableArrays();
-}
-
-PTree::PTree(const PTree& p) : PTree(p.m_char_set_size, p.m_block_size, p.m_ascii_start) {
-    // TODO test this feature
-    for (int i=0; i<m_block_size; i++) {
-        std::copy(p.m_count_table[i], p.m_count_table[i] + p.getCountLength(i),
-                  m_count_table[i]);
-    }
-}
-
-PTree& PTree::operator= (const PTree& p) {
-    return *this;
+    : BigTree(ss, bs, st) {
 }
 
 /**
@@ -81,42 +62,4 @@ long PTree::getCharIndex(const char s[], int cindex) const {
     }
 
     return index;
-}
-
-void PTree::initPowerArray() {
-    m_powers = new long[m_block_size+1]();
-    for (int i=0; i<m_block_size+1; i++) {
-        m_powers[i] = utils::ipow(m_char_set_size, i);
-    }
-
-}
-
-void PTree::allocateCountTableArrays() {
-    m_count_table = new int*[m_block_size]();
-    try {
-        for (int i=0; i<m_block_size; i++) {
-            m_count_table[i] = new int[getCountLength(i)]();
-        }
-    } catch (std::bad_alloc) {
-        deallocateCountTableArrays();
-        throw PTreeException("Failed to allocate memory for count table!");
-    }
-}
-
-void PTree::deallocateCountTableArrays() {
-    for (int i=0; i<m_block_size; i++) {
-        delete[] m_count_table[i];
-    }
-
-    delete[] m_count_table;
-    delete[] m_powers;
-}
-
-
-inline long PTree::getCountLength(int i) const {
-    return m_powers[i+1];
-}
-
-inline long PTree::getCountBlockSize(int i) const {
-    return m_powers[i];
 }

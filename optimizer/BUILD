@@ -1,3 +1,16 @@
+# ============= BigTree =============
+cc_library(
+    name = "BigTree",
+    hdrs = [
+        "BigTree.h",
+        "BigTreeException.h",
+    ],
+    deps = [
+        ":utils",
+    ]
+)
+
+# ============= PTree =============
 cc_library(
     name = "PTree",
     srcs = ["PTree.cpp"],
@@ -23,6 +36,7 @@ cc_test(
     ]
 )
 
+# ============= utils =============
 cc_library(
     name = "utils",
     srcs = ["utils.cpp"],
@@ -39,22 +53,25 @@ cc_test(
     ]
 )
 
+# ============= Predictor =============
 cc_library(
-    name = "BigTree",
-    hdrs = [
-        "BigTree.h",
-        "BigTreeException.h",
-    ],
+    name = "Predictor",
+    srcs = ["Predictor.cpp"],
+    hdrs = ["Predictor.h"],
     deps = [
-        ":utils",
+        ":BigTree",
+        ":PTree",
     ]
 )
 
+# ============= main =============
 cc_binary(
     name = "main",
     srcs = ["main.cpp"],
     copts = ["-Iexternal/gtest/include"],
     deps = [
         ":BigTree",
+        ":Predictor",
+        ":PTree",
     ],
 )

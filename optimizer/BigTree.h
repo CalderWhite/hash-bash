@@ -5,6 +5,10 @@
 #include "utils.h"
 #include "BigTreeException.h"
 
+/**
+ * Not sure how to define a template class in seperate files,
+ * so I haved taken the hit of pushing forward with the project and leaving this as-is for now.
+ */
 template <typename T>
 class BigTree {
 public:
@@ -43,6 +47,10 @@ public:
         }
 
         return index;
+    }
+
+    T** getTreeTable() const {
+        return m_count_table;
     }
 
 protected:

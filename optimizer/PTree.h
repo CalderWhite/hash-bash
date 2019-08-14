@@ -26,7 +26,7 @@
  *        In another you process the other 500. Then, you merge one into the other (or a main PTree).
  *        This final tree has the same result as processing the 1000 strings serially in 1 thread.
  */
-class PTree : public BigTree<long> {
+class PTree : public BigTree<int> {
 public:
     PTree(long char_set_size, long block_size, char ascii_start=' ');
 

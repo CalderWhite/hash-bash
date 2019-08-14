@@ -25,6 +25,7 @@ public:
 
     BigTree(const BigTree& p) : BigTree(p.m_char_set_size, p.m_block_size, p.m_ascii_start) {
         // TODO test this feature
+        std::cout << "Copied!\n";
         for (int i=0; i<m_block_size; i++) {
             std::copy(p.m_count_table[i], p.m_count_table[i] + p.getCountLength(i),
                       m_count_table[i]);

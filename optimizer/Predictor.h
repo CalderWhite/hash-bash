@@ -7,5 +7,5 @@ class Predictor : BigTree<char> {
 public:
     Predictor(long ss, long bs);
 
-    void genFromPTree(PTree const& p);
+    void genFromPTree(PTree p);
 };

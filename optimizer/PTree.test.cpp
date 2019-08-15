@@ -1,12 +1,13 @@
 #include <math.h>
+#include <stdint.h>
 
 #include "gtest/gtest.h"
 
 #include "PTree.h"
 
 TEST(PTree, CountTableSmall) {
-    long block_size = 4;
-    long char_set_size = 95;
+    int64_t block_size = 4;
+    int64_t char_set_size = 95;
     PTree p(char_set_size, block_size, ' ');
 
     // testing the count addition of no
@@ -31,8 +32,8 @@ TEST(PTree, CountTableSmall) {
 }
 
 TEST(PTree, CountTableLarge) {
-    long block_size = 3;
-    long char_set_size = 95;
+    int64_t block_size = 3;
+    int64_t char_set_size = 95;
     PTree p(char_set_size, block_size, ' ');
 
 
@@ -63,8 +64,8 @@ TEST(PTree, CountTableLarge) {
 }
 
 TEST(PTree, MergeTreeSmall) {
-    long block_size = 3;
-    long char_set_size = 95;
+    int64_t block_size = 3;
+    int64_t char_set_size = 95;
     PTree p(char_set_size, block_size, ' ');
     PTree q(char_set_size, block_size, ' ');
 

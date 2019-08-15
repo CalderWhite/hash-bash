@@ -1,9 +1,11 @@
-#include "utils.h"
 #include <iostream>
+#include <stdint.h>
 
-long utils::ipow(long base, long exponent) {
-    long c = 1;
-    for (long i=0; i<exponent; i++) {
+#include "utils.h"
+
+int64_t utils::ipow(int64_t base, int64_t exponent) {
+    int64_t c = 1;
+    for (int64_t i=0; i<exponent; i++) {
         c *= base;
     }
 

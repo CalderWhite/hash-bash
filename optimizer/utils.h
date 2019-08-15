@@ -1,10 +1,12 @@
 #pragma once
 
+#include <stdint.h>
+
 namespace utils {
     /**
      * Util function. Returns the base^exponent for integers only.
      */
-    long ipow(long base, long exponent);
+    int64_t ipow(int64_t base, int64_t exponent);
 
 
     /**

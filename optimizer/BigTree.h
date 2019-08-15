@@ -1,6 +1,7 @@
 #pragma once
 
 #include <exception>
+#include <stdint.h>
 
 #include "utils.h"
 #include "BigTreeException.h"
@@ -12,7 +13,7 @@
 template <typename T>
 class BigTree {
 public:
-    BigTree(long ss, long bs, char st = ' ')
+    BigTree(int64_t ss, int64_t bs, char st = ' ')
         : m_char_set_size(ss), m_block_size(bs), m_ascii_start(st) {
 
         initPowerArray();
@@ -40,9 +41,9 @@ public:
      * Returns the offset of the s[l-1] in m_count_table[l-1]
      * (l-1 since the table starts at 0, but the str len starts at 1)
      */
-    long getCharIndex(const char s[], int cindex) const {
+    int64_t getCharIndex(const char s[], int cindex) const {
         // TODO any faster with formula? (Probably not, since closed form uses powers)
-        long index = 0;
+        int64_t index = 0;
         for (int i=0; i<=cindex; i++) {
             index += (s[i] - m_ascii_start) * getCountBlockSize(cindex-i);
         }
@@ -55,8 +56,8 @@ public:
     }
 
 protected:
-    long m_char_set_size;
-    long m_block_size;
+    int64_t m_char_set_size;
+    int64_t m_block_size;
     char m_ascii_start;
 
     /**
@@ -73,10 +74,10 @@ protected:
     /**
      * Stores the powers m_char_set_size of from 0 to m_block_size 
      */
-    long* m_powers;
+    int64_t* m_powers;
 
     void initPowerArray() {
-        m_powers = new long[m_block_size+1]();
+        m_powers = new int64_t[m_block_size+1]();
         for (int i=0; i<m_block_size+1; i++) {
             m_powers[i] = utils::ipow(m_char_set_size, i);
         }
@@ -112,7 +113,7 @@ protected:
      *
      * @return The length of the m_count_table[i]
      */
-    inline long getCountLength(int i) const {
+    inline int64_t getCountLength(int i) const {
         return m_powers[i+1];
     }
 
@@ -124,7 +125,7 @@ protected:
      * ...
      * m_block_size-1 -> m_char_set_size^(m_block_size-1)
      */
-    inline long getCountBlockSize(int i) const {
+    inline int64_t getCountBlockSize(int i) const {
         return m_powers[i];
     }
 };

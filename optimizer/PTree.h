@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdint.h>
+
 #include "utils.h"
 #include "BigTree.h"
 
@@ -28,7 +30,7 @@
  */
 class PTree : public BigTree<int> {
 public:
-    PTree(long char_set_size, long block_size, char ascii_start=' ');
+    PTree(int64_t char_set_size, int64_t block_size, char ascii_start=' ');
 
     // Rule of 3
     /*
@@ -72,5 +74,5 @@ public:
      * Returns the offset of the s[l-1] in m_count_table[l-1]
      * (l-1 since the table starts at 0, but the str len starts at 1)
      */
-    long getCharIndex(const char s[], int cindex) const;
+    int64_t getCharIndex(const char s[], int cindex) const;
 };

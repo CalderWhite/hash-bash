@@ -1,4 +1,5 @@
 #include <math.h>
+#include <stdint.h>
 
 #include "gtest/gtest.h"
 
@@ -6,7 +7,7 @@
 
 /**
  * Compares the output of the custom ipow private method to 1L left shifted
- * increasing amounts up to the limit of a long.
+ * increasing amounts up to the limit of a int64_t.
  */
 TEST(Utils, IpowPowersOfTwo) {
     for (int i=0; i<64; i++) {
@@ -21,7 +22,7 @@ TEST(Utils, IpowPowersOfTwo) {
 TEST(Utils, IpowStdPow) {
     const int test_count = 4;
 
-    long bases[test_count] = {
+    int64_t bases[test_count] = {
         1,
         2,
         6,
@@ -30,7 +31,7 @@ TEST(Utils, IpowStdPow) {
 
     for (int i=0; i<test_count; i++) {
         for (int j=0; j<3; j++) {
-            ASSERT_EQ(static_cast<long>(pow(bases[i], j)), utils::ipow(bases[i], j));
+            ASSERT_EQ(static_cast<int64_t>(pow(bases[i], j)), utils::ipow(bases[i], j));
         }
     }
 }

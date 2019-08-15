@@ -3,12 +3,13 @@
 #include <cstring>
 #include <exception>
 #include <math.h>
+#include <stdint.h>
 
 #include "utils.h"
 #include "PTree.h"
 #include "PTreeException.h"
 
-PTree::PTree(long ss, long bs, char st)
+PTree::PTree(int64_t ss, int64_t bs, char st)
     : BigTree(ss, bs, st) {
 }
 
@@ -45,18 +46,18 @@ void PTree::mergeTree(PTree const& p) {
 
 int PTree::getSubCount(const char* s) const {
     const int last_char_index = strlen(s) - 1;
-    const long index = getCharIndex(s, last_char_index);
+    const int64_t index = getCharIndex(s, last_char_index);
     return m_count_table[last_char_index][index];
 }
 
 int PTree::getCountAt(const char* s, int i) const {
-    const long index = getCharIndex(s, i);
+    const int64_t index = getCharIndex(s, i);
     return m_count_table[i][index];
 }
 
-long PTree::getCharIndex(const char s[], int cindex) const {
+int64_t PTree::getCharIndex(const char s[], int cindex) const {
     // TODO any faster with formula? (Probably not, since closed form uses powers)
-    long index = 0;
+    int64_t index = 0;
     for (int i=0; i<=cindex; i++) {
         index += (s[i] - m_ascii_start) * getCountBlockSize(cindex-i);
     }

@@ -1,8 +1,10 @@
+#include <stdint.h>
+
 #include "PTree.h"
 #include "Predictor.h"
 #include "utils.h"
 
-Predictor::Predictor(long ss, long bs) : BigTree(ss, bs) {}
+Predictor::Predictor(int64_t ss, int64_t bs) : BigTree(ss, bs) {}
 
 void Predictor::genFromPTree(PTree p) {
     int** tree_table = p.getTreeTable();

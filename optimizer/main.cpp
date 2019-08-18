@@ -19,4 +19,12 @@ int main() {
 
     Predictor pred(char_set_size, block_size);
     pred.genFromPTree(p);
+
+    std::cout << "Writing out compressed stream...\n";
+    pred.serializeToFile("trained.dat");
+
+    Predictor new_pred(CHAR_SET_SIZE, BLOCK_SIZE);
+
+    std::cout << "Reading in compressed stream...\n";
+    new_pred.deserializeFromFile("trained.dat");
 }

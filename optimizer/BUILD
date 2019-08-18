@@ -61,6 +61,8 @@ cc_library(
     deps = [
         ":BigTree",
         ":PTree",
+        "@boost//:serialization",
+        "@boost//:iostreams",
     ]
 )
 
@@ -73,5 +75,7 @@ cc_binary(
         ":BigTree",
         ":Predictor",
         ":PTree",
+        "@boost//:serialization",
+        "@boost//:iostreams",
     ],
 )

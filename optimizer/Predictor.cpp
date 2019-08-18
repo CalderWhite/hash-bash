@@ -1,4 +1,11 @@
 #include <stdint.h>
+#include <fstream>
+
+#include <boost/archive/binary_oarchive.hpp>
+#include <boost/archive/binary_iarchive.hpp>
+#include <boost/iostreams/filtering_stream.hpp>
+#include <boost/iostreams/copy.hpp>
+#include <boost/iostreams/filter/gzip.hpp>
 
 #include "PTree.h"
 #include "Predictor.h"
@@ -49,4 +56,30 @@ void Predictor::genFromPTree(PTree p) {
             }
         }
     }
+}
+
+void Predictor::serializeToFile(std::string filename) {
+    std::ofstream out_stream(filename, std::ios::binary | std::ios::out);
+
+    boost::iostreams::filtering_ostream out;
+    out.push(boost::iostreams::gzip_compressor());
+    //out.push(boost::iostreams::gzip_compressor()); // double compress thattt
+    out.push(out_stream);
+
+    boost::archive::binary_oarchive out_archive(out);
+
+    out_archive << *this;
+}
+
+void Predictor::deserializeFromFile(std::string filename) {
+    std::ifstream in_stream(filename, std::ios::binary | std::ios::in);
+
+    boost::iostreams::filtering_istream filter;
+    filter.push(boost::iostreams::gzip_decompressor());
+    //filter.push(boost::iostreams::gzip_decompressor());
+    filter.push(in_stream);
+
+    boost::archive::binary_iarchive ia(filter);
+    Predictor temp(m_char_set_size, m_block_size);
+    ia >> temp;
 }

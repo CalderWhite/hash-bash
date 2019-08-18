@@ -20,7 +20,7 @@ PTree::PTree(int64_t ss, int64_t bs, char st)
  */
 void PTree::addStr(const char s[], int len) {
     if (len == 0) {
-        if (strlen(s) != m_block_size) {
+        if (strlen(s) != static_cast<unsigned int>(m_block_size)) {
             throw PTreeException("Input string did not match block size!");
         }
     } else if (len != m_block_size) {

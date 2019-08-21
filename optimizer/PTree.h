@@ -1,5 +1,6 @@
 #pragma once
 
+#include <istream>
 #include <stdint.h>
 
 #include "utils.h"
@@ -45,6 +46,11 @@ public:
     void addStr(const char s[], int len=0);
 
     /**
+     * Call addStr for each m_block_size-d substring
+     */
+    void addLongStr(const char s[], int len);
+
+    /**
      * Merges the current count tree with the inputted PTree's count tree.
      */
     void mergeTree(PTree const& p);
@@ -75,4 +81,12 @@ public:
      * (l-1 since the table starts at 0, but the str len starts at 1)
      */
     int64_t getCharIndex(const char s[], int cindex) const;
+
+    void ingestData(const char* start, const char* stop);
+
+    void ingestFileMultiThread(std::istream& infile, int threads);
+
+private:
+    static void createIngestThread(const char* start, const char* stop, PTree* ptree);
+
 };

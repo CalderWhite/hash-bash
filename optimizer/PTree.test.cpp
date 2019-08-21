@@ -80,6 +80,72 @@ TEST(PTree, MergeTreeSmall) {
     EXPECT_EQ(1, p.getCountAt("tha", 2));
 }
 
+TEST(PTree, AddLongStr) {
+    int64_t block_size = 3;
+    int64_t char_set_size = 95;
+    PTree p(char_set_size, block_size, ' ');
+
+    p.addLongStr("abcd", 4);
+
+    EXPECT_EQ(1, p.getCountAt("a", 0));
+    EXPECT_EQ(1, p.getCountAt("b", 0));
+
+    EXPECT_EQ(1, p.getCountAt("ab", 1));
+    EXPECT_EQ(1, p.getCountAt("bc", 1));
+}
+
+TEST(PTree, IngestDataNoNewline) {
+    PTree p(95, 3);
+
+    const char test[] = "abcd";
+    p.ingestData(&test[0], &test[0] + 4);
+
+    EXPECT_EQ(1, p.getCountAt("a", 0));
+    EXPECT_EQ(1, p.getCountAt("b", 0));
+
+    EXPECT_EQ(1, p.getCountAt("ab", 1));
+    EXPECT_EQ(1, p.getCountAt("bc", 1));
+
+    EXPECT_EQ(1, p.getCountAt("abc", 2));
+    EXPECT_EQ(1, p.getCountAt("bcd", 2));
+}
+
+TEST(PTree, IngestDataMultiple) {
+    PTree p(95, 3);
+
+    const char test[] = "this\nthat\n";
+    p.ingestData(&test[0], &test[0] + 9);
+
+    EXPECT_EQ(2, p.getCountAt("t", 0));
+    EXPECT_EQ(2, p.getCountAt("th", 1));
+    EXPECT_EQ(1, p.getCountAt("thi", 2));
+    EXPECT_EQ(1, p.getCountAt("tha", 2));
+}
+
+TEST(PTree, IngstFileeMultiThreadSplit) {
+    PTree p(95, 3);
+
+    std::istringstream test("this\nthat\n");
+    p.ingestFileMultiThread(test, 2);
+
+    EXPECT_EQ(2, p.getCountAt("t", 0));
+    EXPECT_EQ(2, p.getCountAt("th", 1));
+    EXPECT_EQ(1, p.getCountAt("thi", 2));
+    EXPECT_EQ(1, p.getCountAt("tha", 2));
+}
+
+TEST(PTree, IngstFileeMultiThreadExtra) {
+    PTree p(95, 3);
+
+    std::istringstream test("this\nthat\n");
+    p.ingestFileMultiThread(test, 3);
+
+    EXPECT_EQ(2, p.getCountAt("t", 0));
+    EXPECT_EQ(2, p.getCountAt("th", 1));
+    EXPECT_EQ(1, p.getCountAt("thi", 2));
+    EXPECT_EQ(1, p.getCountAt("tha", 2));
+}
+
 int main(int argc, char* argv[]) {
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

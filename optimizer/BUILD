@@ -78,4 +78,7 @@ cc_binary(
         "@boost//:serialization",
         "@boost//:iostreams",
     ],
+    data = [
+        "//data:crackstation-human-only.txt",
+    ],
 )

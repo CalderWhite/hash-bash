@@ -14,7 +14,7 @@ int64_t utils::ipow(int64_t base, int64_t exponent) {
 
 int utils::binarySearch(int a[], int item, int low, int high) {
     if (high <= low) {
-        return (item > a[low]) ?  (low + 1) : low;
+        return (item > a[low]) ? (low + 1) : low;
     }
 
     int mid = (low + high)/2;

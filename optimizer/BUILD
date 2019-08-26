@@ -79,6 +79,19 @@ cc_test(
     ]
 )
 
+# ============= PredictorCounter =============
+cc_library(
+    name = "PredictorCounter",
+    srcs = ["PredictorCounter.cpp"],
+    hdrs = ["PredictorCounter.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":PTree",
+        ":Predictor",
+        "@boost//:multiprecision",
+    ]
+)
+
 # ============= main =============
 cc_binary(
     name = "main",
@@ -86,8 +99,9 @@ cc_binary(
     copts = ["-Iexternal/gtest/include"],
     deps = [
         ":BigTree",
-        ":Predictor",
         ":PTree",
+        ":Predictor",
+        ":PredictorCounter",
         "@boost//:serialization",
         "@boost//:iostreams",
     ],

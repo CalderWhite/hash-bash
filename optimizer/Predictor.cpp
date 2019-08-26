@@ -85,7 +85,7 @@ void Predictor::deserializeFromFile(std::string filename) {
 }
 
 void Predictor::getChars(int64_t* p, int n, char* out) {
-    char last_char = ' ';
+    char last_char = m_ascii_start;
     int64_t start = 0;
     for (int i=0; i<n; i++) {
         // start is a sum of the character's indicies where the first should be 
@@ -93,10 +93,19 @@ void Predictor::getChars(int64_t* p, int n, char* out) {
         // each time it is used, so multiplying it each time acts as "adding"
         // that factor in. Naturally the indicies that have been around the longest
         // end up with the largest power.
-        start += (last_char-' ');
+        start += (last_char-m_ascii_start);
         start *= m_char_set_size;
         last_char = m_count_table[i][start + p[i]];
 
         out[i] = last_char;
     }
+}
+
+char Predictor::getNextChar(char* a, int last_index) {
+    int64_t index = 0;
+    for (int i=0; i<m_block_size-1; i++) {
+        index += getCountBlockSize(m_block_size-i-1) * (a[i] - m_ascii_start);
+    }
+
+    return m_count_table[m_block_size - 1][index + last_index];
 }

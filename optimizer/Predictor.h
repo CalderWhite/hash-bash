@@ -46,6 +46,12 @@ public:
      */
     void getChars(int64_t* p, int n, char* out);
 
+    /**
+     * Finds the position of the final array via the chain in a.
+     * Then returns last_index of that array.
+     */
+    char getNextChar(char* a, int last_index);
+
 private:
     friend class boost::serialization::access;
 

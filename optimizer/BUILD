@@ -5,6 +5,7 @@ cc_library(
         "BigTree.h",
         "BigTreeException.h",
     ],
+    visibility = ["//visibility:public"],
     deps = [
         ":utils",
     ]
@@ -14,11 +15,11 @@ cc_library(
 cc_library(
     name = "PTree",
     srcs = ["PTree.cpp"],
-    copts = ["-Iexternal/gtest/include"],
     hdrs = [
         "PTree.h",
         "PTreeException.h",
     ],
+    visibility = ["//visibility:public"],
     deps = [
         "@gtest//:main",
         ":utils",
@@ -58,6 +59,7 @@ cc_library(
     name = "Predictor",
     srcs = ["Predictor.cpp"],
     hdrs = ["Predictor.h"],
+    visibility = ["//visibility:public"],
     deps = [
         ":BigTree",
         ":PTree",

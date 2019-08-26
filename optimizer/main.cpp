@@ -14,18 +14,18 @@ const long BLOCK_SIZE = 4;
 const long CHAR_SET_SIZE = 95;
 
 int main() {
-    //Predictor pred(CHAR_SET_SIZE, BLOCK_SIZE);
-    //pred.deserializeFromFile("/home/calder/repos/hash-bash/optimizer/trained.dat.gz");
-
+    Predictor pred(CHAR_SET_SIZE, BLOCK_SIZE);
+    pred.deserializeFromFile("/home/cwhite/test/hash-bash/optimizer/trained.dat.gz");
     /*
-    PredictorCounter pc(pred, 12, 1);
+    PTree p(CHAR_SET_SIZE, BLOCK_SIZE, ' ');
 
-    char s[12] = {0};
-    pc.getNext(s);
+    p.addStr("node");
+    p.addStr("nope");
+    p.addStr("nail");
 
-    std::cout << s << "\n";
+    Predictor pred(CHAR_SET_SIZE, BLOCK_SIZE);
+    pred.genFromPTree(p);
     */
-
-    /*
-    */
+    PredictorCounter pc(pred, 4, 1);
+    pc.genAll();
 }

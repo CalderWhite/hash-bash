@@ -63,7 +63,6 @@ void Predictor::serializeToFile(std::string filename) {
 
     boost::iostreams::filtering_ostream out;
     out.push(boost::iostreams::gzip_compressor());
-    //out.push(boost::iostreams::gzip_compressor()); // double compress thattt
     out.push(out_stream);
 
     boost::archive::binary_oarchive out_archive(out);
@@ -76,7 +75,6 @@ void Predictor::deserializeFromFile(std::string filename) {
 
     boost::iostreams::filtering_istream filter;
     filter.push(boost::iostreams::gzip_decompressor());
-    //filter.push(boost::iostreams::gzip_decompressor());
     filter.push(in_stream);
 
     boost::archive::binary_iarchive ia(filter);

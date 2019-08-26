@@ -55,6 +55,35 @@ public:
         return m_count_table;
     }
 
+    inline int getBlockSize() {
+        return m_block_size;
+    }
+
+    inline int getCharSetSize() {
+        return m_char_set_size;
+    }
+
+    /**
+     * This method is used to avoid the calculation of powers.
+     *
+     * @return The length of the m_count_table[i]
+     */
+    inline int64_t getCountLength(int i) const {
+        return m_powers[i+1];
+    }
+
+    /**
+     * Returns the length of the sub-arrays of m_count_table[i] using m_powers.
+     * 0 -> 1
+     * 1 -> m_char_set_size
+     * 2 -> m_char_set_size^2
+     * ...
+     * m_block_size-1 -> m_char_set_size^(m_block_size-1)
+     */
+    inline int64_t getCountBlockSize(int i) const {
+        return m_powers[i];
+    }
+
 protected:
     int64_t m_char_set_size;
     int64_t m_block_size;
@@ -106,26 +135,5 @@ protected:
 
         delete[] m_count_table;
         delete[] m_powers;
-    }
-
-    /**
-     * This method is used to avoid the calculation of powers.
-     *
-     * @return The length of the m_count_table[i]
-     */
-    inline int64_t getCountLength(int i) const {
-        return m_powers[i+1];
-    }
-
-    /**
-     * Returns the length of the sub-arrays of m_count_table[i] using m_powers.
-     * 0 -> 1
-     * 1 -> m_char_set_size
-     * 2 -> m_char_set_size^2
-     * ...
-     * m_block_size-1 -> m_char_set_size^(m_block_size-1)
-     */
-    inline int64_t getCountBlockSize(int i) const {
-        return m_powers[i];
     }
 };

@@ -66,6 +66,17 @@ cc_library(
     ]
 )
 
+cc_test(
+    name = "PredictorTests",
+    srcs = ["Predictor.test.cpp"],
+    copts = ["-Iexternal/gtest/include"],
+    deps = [
+        "@gtest//:main",
+        ":Predictor",
+        ":PTree",
+    ]
+)
+
 # ============= main =============
 cc_binary(
     name = "main",

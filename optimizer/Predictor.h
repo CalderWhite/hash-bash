@@ -23,6 +23,29 @@ public:
 
     void deserializeFromFile(std::string filename);
 
+    /**
+     * Returns the sequence of chars after the increasing string of indicies, p.
+     *
+     * Example:
+     * The Predictor has node + nope + nail in its count table.
+     * The indicies for each letter go as follows
+     * n: 0 --> o: 0 --> d: 0 --> e: 0
+     * |        |
+     * |        +--> p: 1 --> e: 0
+     * |
+     * +--> a: 1 --> i: 0 --> l: 0
+     *
+     * Notice that 'o' comes before 'a', due to the higher number of occurances of 'o' after 'n' is the first letter.
+     *
+     * The most probable char is always at the lowest index. The indicies are also dependant
+     * on the characters that come before them, similar to a Trie.
+     *
+     * @param p The list of indicies to get. 0: Most probable. m_char_set_size-1: Least probable.
+     * @param n How many characters you wish to get. Max of m_block_size.
+     * @param out The array to put the retrieved characters in.
+     */
+    void getChars(int64_t* p, int n, char* out);
+
 private:
     friend class boost::serialization::access;
 

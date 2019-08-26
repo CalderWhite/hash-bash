@@ -122,7 +122,7 @@ TEST(PTree, IngestDataMultiple) {
     EXPECT_EQ(1, p.getCountAt("tha", 2));
 }
 
-TEST(PTree, IngstFileeMultiThreadSplit) {
+TEST(PTree, IngestFileMultiThreadSplit) {
     PTree p(95, 3);
 
     std::istringstream test("this\nthat\n");
@@ -134,7 +134,7 @@ TEST(PTree, IngstFileeMultiThreadSplit) {
     EXPECT_EQ(1, p.getCountAt("tha", 2));
 }
 
-TEST(PTree, IngstFileeMultiThreadExtra) {
+TEST(PTree, IngestFileMultiThreadExtra) {
     PTree p(95, 3);
 
     std::istringstream test("this\nthat\n");

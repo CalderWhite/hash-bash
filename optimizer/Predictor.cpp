@@ -81,5 +81,22 @@ void Predictor::deserializeFromFile(std::string filename) {
 
     boost::archive::binary_iarchive ia(filter);
     Predictor temp(m_char_set_size, m_block_size);
-    ia >> temp;
+    ia >> *this;
+}
+
+void Predictor::getChars(int64_t* p, int n, char* out) {
+    char last_char = ' ';
+    int64_t start = 0;
+    for (int i=0; i<n; i++) {
+        // start is a sum of the character's indicies where the first should be 
+        // multiplied by m_char_set_size^(i-1). This sum can be factored by 95 
+        // each time it is used, so multiplying it each time acts as "adding"
+        // that factor in. Naturally the indicies that have been around the longest
+        // end up with the largest power.
+        start += (last_char-' ');
+        start *= m_char_set_size;
+        last_char = m_count_table[i][start + p[i]];
+
+        out[i] = last_char;
+    }
 }

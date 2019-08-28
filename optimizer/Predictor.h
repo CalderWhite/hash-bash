@@ -13,6 +13,10 @@ class Predictor : public BigTree<char> {
 public:
     Predictor(int64_t ss, int64_t bs);
 
+    /**
+     * Builds a predictor from a PTree. The PTree parameter is deliberately copied 
+     * as the sorting algorithm is in place and changes the values of the PTree.
+     */
     void genFromPTree(PTree p);
 
     /**

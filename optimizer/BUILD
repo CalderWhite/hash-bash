@@ -92,20 +92,25 @@ cc_library(
     ]
 )
 
-# ============= main =============
-cc_binary(
-    name = "main",
-    srcs = ["main.cpp"],
+cc_test(
+    name = "PredictorCounterTests",
+    srcs = ["Predictor.test.cpp"],
     copts = ["-Iexternal/gtest/include"],
     deps = [
-        ":BigTree",
+        "@gtest//:main",
         ":PTree",
         ":Predictor",
         ":PredictorCounter",
-        "@boost//:serialization",
-        "@boost//:iostreams",
-    ],
-    data = [
-        "//data:crackstation-human-only.txt",
+    ]
+)
+
+# ============= main =============
+cc_binary(
+    name = "optimizer",
+    srcs = ["optimizer.cpp"],
+    copts = ["-Iexternal/gtest/include"],
+    deps = [
+        ":Predictor",
+        ":PredictorCounter",
     ],
 )

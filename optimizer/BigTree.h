@@ -55,12 +55,20 @@ public:
         return m_count_table;
     }
 
-    inline int getBlockSize() {
+    T at(int depth, int64_t index) const {
+        return m_count_table[depth][index];
+    }
+
+    inline int getBlockSize() const {
         return m_block_size;
     }
 
-    inline int getCharSetSize() {
+    inline int getCharSetSize() const {
         return m_char_set_size;
+    }
+
+    inline char getAsciiStart() const {
+        return m_ascii_start;
     }
 
     /**

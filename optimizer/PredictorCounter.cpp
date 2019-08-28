@@ -40,18 +40,44 @@ void PredictorCounter::getNext(char* out) {
     m_count += m_increment;
 }
 
+
 void PredictorCounter::genAll() {
-    char** table = m_predictor.getTreeTable();
-    for (int i=0; i<m_predictor.getCharSetSize(); i++) {
-        std::cout << table[0][i];
-    }
-    std::cout << "\n";
-    /*
-    char o[5] = {0};
+    char o[7] = {0};
     while (m_count < m_powers[m_guess_length]) {
         getNext(o);
-
         std::cout << o << "\n";
     }
-    */
+}
+
+mp::int128_t PredictorCounter::getOffset(const char* s) {
+    mp::int128_t offset = 0;
+
+    int block_size = m_predictor.getBlockSize();
+
+    for (int i=0; i<block_size; i++) {
+        offset += getSubOffset(s, i) * m_powers[m_guess_length - i - 1];
+    }
+
+    for (int i=block_size; i<m_guess_length; i++) {
+        offset += getSubOffset(&s[1+i-block_size], block_size-1) * m_powers[m_guess_length - i - 1];
+    }
+
+    return offset;
+}
+
+int PredictorCounter::getSubOffset(const char* s, int last_index) {
+    // get the offset of the array the last char is in.
+    int64_t start = 0;
+    for (int i=0; i<last_index; i++) {
+        start += (s[i] - m_predictor.getAsciiStart()) * m_predictor.getCountBlockSize(last_index - i);
+    }
+
+    for (int i=0; i<m_predictor.getCharSetSize(); i++) {
+        if (m_predictor.at(last_index, start + i) == s[last_index]) {
+            return i;
+        }
+    }
+
+    // TODO: Better error handling here.
+    return -1;
 }

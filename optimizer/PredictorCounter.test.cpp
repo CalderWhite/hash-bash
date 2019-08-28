@@ -35,9 +35,9 @@ TEST(PredictorCounter, GetOffset) {
 
     Predictor pred(char_set_size, block_size);
     pred.genFromPTree(p);
-    PredictorCounter pc(pred, 8, 1);
+    PredictorCounter pc(pred, 7, 1);
 
-    EXPECT_EQ(0, pc.getOffset("bbbbbbbb"));
+    EXPECT_EQ(0, pc.getOffset("bbbbbbb"));
 }
 
 int main(int argc, char* argv[]) {

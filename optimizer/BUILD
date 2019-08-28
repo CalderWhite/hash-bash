@@ -104,13 +104,17 @@ cc_test(
     ]
 )
 
-# ============= main =============
+# ============= optimize binary =============
 cc_binary(
     name = "optimizer",
     srcs = ["optimizer.cpp"],
-    copts = ["-Iexternal/gtest/include"],
+    copts = ["-std=c++11", "-Iexternal/gtest/include"],
     deps = [
         ":Predictor",
         ":PredictorCounter",
+        "@boost//:multiprecision",
+    ],
+    data = [
+        "//data:crackstation-human-only.txt",
     ],
 )

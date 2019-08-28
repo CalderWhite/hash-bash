@@ -23,7 +23,7 @@ public:
     mp::int128_t getOffset(const char* s);
 
 private:
-    Predictor m_predictor;
+    const Predictor& m_predictor;
     int m_guess_length;
     int m_increment;
     mp::int128_t m_count;

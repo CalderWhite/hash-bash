@@ -23,7 +23,7 @@ public:
      * Serialization helper function. For more extensibility,
      * the user can do the boost serialization of the class themselves.
      */
-    void serializeToFile(std::string filename);
+    void serializeToFile(std::string filename) const;
 
     void deserializeFromFile(std::string filename);
 
@@ -48,13 +48,13 @@ public:
      * @param n How many characters you wish to get. Max of m_block_size.
      * @param out The array to put the retrieved characters in.
      */
-    void getChars(int64_t* p, int n, char* out);
+    void getChars(int64_t* p, int n, char* out) const;
 
     /**
      * Finds the position of the final array via the chain in a.
      * Then returns last_index of that array.
      */
-    char getNextChar(char* a, int last_index);
+    char getNextChar(char* a, int last_index) const;
 
 private:
     friend class boost::serialization::access;

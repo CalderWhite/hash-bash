@@ -58,7 +58,7 @@ void Predictor::genFromPTree(PTree p) {
     }
 }
 
-void Predictor::serializeToFile(std::string filename) {
+void Predictor::serializeToFile(std::string filename) const {
     std::ofstream out_stream(filename, std::ios::binary | std::ios::out);
 
     boost::iostreams::filtering_ostream out;
@@ -82,7 +82,7 @@ void Predictor::deserializeFromFile(std::string filename) {
     ia >> *this;
 }
 
-void Predictor::getChars(int64_t* p, int n, char* out) {
+void Predictor::getChars(int64_t* p, int n, char* out) const {
     char last_char = m_ascii_start;
     int64_t start = 0;
     for (int i=0; i<n; i++) {
@@ -99,7 +99,7 @@ void Predictor::getChars(int64_t* p, int n, char* out) {
     }
 }
 
-char Predictor::getNextChar(char* a, int last_index) {
+char Predictor::getNextChar(char* a, int last_index) const {
     int64_t index = 0;
     for (int i=0; i<m_block_size-1; i++) {
         index += getCountBlockSize(m_block_size-i-1) * (a[i] - m_ascii_start);

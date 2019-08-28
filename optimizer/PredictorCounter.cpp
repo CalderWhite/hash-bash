@@ -8,7 +8,6 @@ namespace mp = boost::multiprecision;
 
 PredictorCounter::PredictorCounter(const Predictor& p, int gl, int inc)
     : m_predictor(p), m_guess_length(gl), m_increment(inc), m_count(0) {
-
     m_powers.reserve(m_guess_length+1);
     for (int i=0; i<m_guess_length+1; i++) {
         m_powers[i] = mp::pow(mp::int128_t(m_predictor.getCharSetSize()), i);

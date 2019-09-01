@@ -21,6 +21,7 @@ public:
      * Returns how many other generations will be created before s is found.
      */
     mp::int128_t getOffset(const char* s);
+    mp::int128_t getBadOffset(const char* s);
 
 private:
     const Predictor& m_predictor;

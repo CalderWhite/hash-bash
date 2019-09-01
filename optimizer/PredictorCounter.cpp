@@ -48,6 +48,15 @@ void PredictorCounter::genAll() {
     }
 }
 
+mp::int128_t PredictorCounter::getBadOffset(const char* s) {
+    mp::int128_t offset = 0;
+    for (int i=0; i<m_guess_length; i++) {
+        offset += (s[i] - ' ') * m_powers[m_guess_length - i - 1];
+    }
+
+    return offset;
+}
+
 mp::int128_t PredictorCounter::getOffset(const char* s) {
     mp::int128_t offset = 0;
 

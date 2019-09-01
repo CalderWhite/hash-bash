@@ -2,6 +2,11 @@
 
 #include <stdint.h>
 
+/**
+ * Some basic algo implementations were required for this project, and to reduce dependancies
+ * for consistency (and sometimes speed!) they were implemented in-project.
+ * This is where these algorithms live.
+ */
 namespace utils {
     /**
      * Util function. Returns the base^exponent for integers only.

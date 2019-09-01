@@ -9,6 +9,11 @@
 #include "PTree.h"
 #include "BigTree.h"
 
+/**
+ * Stores sorted arrays of chars in order of most probable to least.
+ * The sub-arrays of each are still indexed via the char's integer value (minus the ascii start).
+ * char() - m_ascii_start. However, each sub array is then sorted.
+ */
 class Predictor : public BigTree<char> {
 public:
     Predictor(int64_t ss, int64_t bs);

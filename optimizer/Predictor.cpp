@@ -14,8 +14,6 @@
 Predictor::Predictor(int64_t ss, int64_t bs) : BigTree(ss, bs) {}
 
 void Predictor::genFromPTree(PTree p) {
-    int** tree_table = p.getTreeTable();
-
     int index_tracker[m_char_set_size] = {0};
 
     // set starting values. keeps track of which characters are at what index
@@ -24,7 +22,7 @@ void Predictor::genFromPTree(PTree p) {
     }
 
     for (int depth=0; depth<m_block_size; depth++) {
-        // sorting input: tree_table
+        // sorting input: p.m_count_table
         // sorting output: m_count_table
         for (int start=0; start<getCountLength(depth); start+=m_char_set_size) {
             // custom sort since we want to avoid lots of memory alloc
@@ -34,7 +32,7 @@ void Predictor::genFromPTree(PTree p) {
             bool has_data = false;
             for (int i=0; i<m_char_set_size; i++) {
                 index_tracker[i] = i;
-                if (tree_table[depth][start+i] != 0) {
+                if (p.at(depth, start+i) != 0) {
                     has_data = true;
                 }
             }
@@ -45,7 +43,7 @@ void Predictor::genFromPTree(PTree p) {
             // empty arrays are not processed (although, if you are training with enough data
             // and good data, hopefully all the arrays will have data)
             if (has_data) {
-                utils::insertionSort(&tree_table[depth][start], m_char_set_size, index_tracker);
+                utils::insertionSort(p.atRef(depth, start), m_char_set_size, index_tracker);
             }
 
             // copy values into their char values, reversed into our count_table

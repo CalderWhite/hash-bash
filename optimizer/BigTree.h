@@ -7,8 +7,9 @@
 #include "BigTreeException.h"
 
 /**
- * Not sure how to define a template class in seperate files,
- * so I haved taken the hit of pushing forward with the project and leaving this as-is for now.
+ * Although templating is discouraged, the overlap between the Predictor and PTree was too great.
+ * Thus, a base "BigTree" template class was created. This contains most of the code for general operations
+ * on the tree to provide a layer of abstraction above the 2d array representing the tree, indexed by a character string
  */
 template <typename T>
 class BigTree {
@@ -25,8 +26,6 @@ public:
     }
 
     BigTree(const BigTree& p) : BigTree(p.m_char_set_size, p.m_block_size, p.m_ascii_start) {
-        // TODO test this feature
-        std::cout << "Copied!\n";
         for (int i=0; i<m_block_size; i++) {
             std::copy(p.m_count_table[i], p.m_count_table[i] + p.getCountLength(i),
                       m_count_table[i]);
@@ -51,24 +50,20 @@ public:
         return index;
     }
 
-    T** getTreeTable() const {
-        return m_count_table;
-    }
-
+    /**
+     * Returns the value at [depth][index] to avoid direct access of the tree.
+     */
     T at(int depth, int64_t index) const {
         return m_count_table[depth][index];
     }
 
-    inline int getBlockSize() const {
-        return m_block_size;
-    }
-
-    inline int getCharSetSize() const {
-        return m_char_set_size;
-    }
-
-    inline char getAsciiStart() const {
-        return m_ascii_start;
+    /**
+     * Returns a reference to [depth][index].
+     * This is useful for operating on the sub-arrays of m_count_table[depth].
+     * (This is because each branch is stored next to one another. Each are of length m_char_set_size.)
+     */
+    T* atRef(int depth, int64_t index) const {
+        return &m_count_table[depth][index];
     }
 
     /**
@@ -90,6 +85,22 @@ public:
      */
     inline int64_t getCountBlockSize(int i) const {
         return m_powers[i];
+    }
+
+    /**
+     * Getters
+     */
+
+    inline int getBlockSize() const {
+        return m_block_size;
+    }
+
+    inline int getCharSetSize() const {
+        return m_char_set_size;
+    }
+
+    inline char getAsciiStart() const {
+        return m_ascii_start;
     }
 
 protected:
@@ -136,6 +147,9 @@ protected:
         }
     }
 
+    /**
+     * Deletes the arrays created by allocateCountTableArrays().
+     */
     void deallocateCountTableArrays() {
         for (int i=0; i<m_block_size; i++) {
             delete[] m_count_table[i];

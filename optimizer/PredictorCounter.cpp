@@ -39,15 +39,6 @@ void PredictorCounter::getNext(char* out) {
     m_count += m_increment;
 }
 
-
-void PredictorCounter::genAll() {
-    char o[7] = {0};
-    while (m_count < m_powers[m_guess_length]) {
-        getNext(o);
-        std::cout << o << "\n";
-    }
-}
-
 mp::int128_t PredictorCounter::getBadOffset(const char* s) {
     mp::int128_t offset = 0;
     for (int i=0; i<m_guess_length; i++) {

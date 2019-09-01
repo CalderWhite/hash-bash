@@ -33,14 +33,7 @@ class PTree : public BigTree<int> {
 public:
     PTree(int64_t char_set_size, int64_t block_size, char ascii_start=' ');
 
-    // Rule of 3
-    /*
-    ~PTree();
-    PTree(const PTree& ptree);
-    PTree& operator= (const PTree& ptree);
-    */
-
-    /*
+    /**
      * Increments the count of each character based on the tree's trie-like structure.
      */
     void addStr(const char s[], int len=0);
@@ -55,7 +48,7 @@ public:
      */
     void mergeTree(PTree const& p);
 
-    /*
+    /**
      * Finds the count of the final node in the string's tree
      * I.e. If you were to run getSubCount("abc"):
      *
@@ -82,11 +75,20 @@ public:
      */
     int64_t getCharIndex(const char s[], int cindex) const;
 
+    /**
+     * This calls addLongStr for each \n delimited string between start and stop.
+     */
     void ingestData(const char* start, const char* stop);
 
+    /**
+     * Creates a new thread via createIngestThread to call ingestData on equal chunks of the
+     * istream provided, divided by threads. These are then aggregated via mergeTree.
+     */
     void ingestFileMultiThread(std::istream& infile, int threads);
 
 private:
+    /**
+     * This is the sub function that will be called to ingest data in a single thread.
+     */
     static void createIngestThread(const char* start, const char* stop, PTree* ptree);
-
 };

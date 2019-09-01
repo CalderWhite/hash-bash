@@ -7,18 +7,22 @@
 #include "Predictor.h"
 #include "PredictorCounter.h"
 
+/**
+ * Apologies, this code isn't well documented.
+ * This was used to generate the data for researching the effectiveness of the
+ * optimizer or various plaintext password datasets using one of my trained models.
+ *
+ * This has to be built with bazel then run in the root directory of the repo.
+ * This is because bazel, by design, does not allow workspace modification.
+ * So, if you bazel run the cc_binary you will not find your output in your current directory.
+ */
+
+// these should be the same as the trained model you supply
 const long BLOCK_SIZE = 4;
 const long CHAR_SET_SIZE = 95;
 
-std::chrono::high_resolution_clock::time_point getTime() {
-    return std::chrono::high_resolution_clock::now();
-}
-
-int64_t getTimeDiff(
-    std::chrono::high_resolution_clock::time_point t1,
-    std::chrono::high_resolution_clock::time_point t2) {
-    return std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count();
-}
+// set to true to see what it would be like if a naive brute force was used.
+const bool USE_BAD = false;
 
 struct my_numpunct : std::numpunct<char> {
   std::string do_grouping() const {return "\03";}
@@ -69,7 +73,13 @@ int main(int argc, char** argv) {
 
             if (skip) continue;
 
-            mp::int128_t offset = counters[line.length()].getBadOffset(line.c_str());
+            mp::int128_t offset;
+            if (USE_BAD) {
+                offset = counters[line.length()].getBadOffset(line.c_str());
+            } else {
+                offset = counters[line.length()].getOffset(line.c_str());
+            }
+
             mp::int128_t odiv = max_o[line.length()] / agg_groups;
             int index = static_cast<int>(offset / odiv);
 

@@ -9,3 +9,17 @@ cc_binary(
         "//data:crackstation-human-only.txt",
     ],
 )
+
+cc_binary(
+    name = "get_offset",
+    srcs = ["get_offset.cpp"],
+    copts = ["-std=c++11", "-Iexternal/gtest/include"],
+    deps = [
+        "//optimizer:Predictor",
+        "//optimizer:PredictorCounter",
+        "@boost//:multiprecision",
+    ],
+    data = [
+        "//data:crackstation-human-only.txt",
+    ],
+)

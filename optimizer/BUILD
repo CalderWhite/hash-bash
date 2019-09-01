@@ -11,13 +11,13 @@ cc_library(
     ]
 )
 
-# ============= PTree =============
+# ============= CountTree =============
 cc_library(
-    name = "PTree",
-    srcs = ["PTree.cpp"],
+    name = "CountTree",
+    srcs = ["CountTree.cpp"],
     hdrs = [
-        "PTree.h",
-        "PTreeException.h",
+        "CountTree.h",
+        "CountTreeException.h",
     ],
     visibility = ["//visibility:public"],
     deps = [
@@ -28,12 +28,12 @@ cc_library(
 )
 
 cc_test(
-    name = "PTreeTests",
-    srcs = ["PTree.test.cpp"],
+    name = "CountTreeTests",
+    srcs = ["CountTree.test.cpp"],
     copts = ["-Iexternal/gtest/include"],
     deps = [
         "@gtest//:main",
-        ":PTree",
+        ":CountTree",
     ]
 )
 
@@ -62,7 +62,7 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = [
         ":BigTree",
-        ":PTree",
+        ":CountTree",
         "@boost//:serialization",
         "@boost//:iostreams",
     ]
@@ -75,7 +75,7 @@ cc_test(
     deps = [
         "@gtest//:main",
         ":Predictor",
-        ":PTree",
+        ":CountTree",
     ]
 )
 
@@ -86,7 +86,7 @@ cc_library(
     hdrs = ["PredictorCounter.h"],
     visibility = ["//visibility:public"],
     deps = [
-        ":PTree",
+        ":CountTree",
         ":Predictor",
         "@boost//:multiprecision",
     ]
@@ -98,7 +98,7 @@ cc_test(
     copts = ["-Iexternal/gtest/include"],
     deps = [
         "@gtest//:main",
-        ":PTree",
+        ":CountTree",
         ":Predictor",
         ":PredictorCounter",
     ]

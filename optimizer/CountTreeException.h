@@ -6,7 +6,7 @@
 /**
  * Custom exceptions to improve error catching/info.
  */
-class PTreeException: public std::runtime_error {
+class CountTreeException: public std::runtime_error {
 public:
-    PTreeException(const char* msg) : std::runtime_error(msg){}
+    CountTreeException(const char* msg) : std::runtime_error(msg){}
 };

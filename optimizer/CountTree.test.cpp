@@ -3,12 +3,12 @@
 
 #include "gtest/gtest.h"
 
-#include "PTree.h"
+#include "CountTree.h"
 
-TEST(PTree, CountTableSmall) {
+TEST(CountTree, CountTableSmall) {
     int64_t block_size = 4;
     int64_t char_set_size = 95;
-    PTree p(char_set_size, block_size, ' ');
+    CountTree p(char_set_size, block_size, ' ');
 
     // testing the count addition of no
     p.addStr("node");
@@ -16,7 +16,7 @@ TEST(PTree, CountTableSmall) {
 
     // In ascii, ~ is the last readable character.
     // This is important, since the following test makes sure our arrays are the correct size
-    // If the size is incorrect, PTree will throw a segmentation fault.
+    // If the size is incorrect, CountTree will throw a segmentation fault.
     p.addStr("~~~~");
 
     EXPECT_EQ(2, p.getSubCount("n"));
@@ -31,10 +31,10 @@ TEST(PTree, CountTableSmall) {
     EXPECT_EQ(1, p.getSubCount("~~~~"));
 }
 
-TEST(PTree, CountTableLarge) {
+TEST(CountTree, CountTableLarge) {
     int64_t block_size = 3;
     int64_t char_set_size = 95;
-    PTree p(char_set_size, block_size, ' ');
+    CountTree p(char_set_size, block_size, ' ');
 
 
     char s[block_size] = {0};
@@ -63,11 +63,11 @@ TEST(PTree, CountTableLarge) {
     }
 }
 
-TEST(PTree, MergeTreeSmall) {
+TEST(CountTree, MergeTreeSmall) {
     int64_t block_size = 3;
     int64_t char_set_size = 95;
-    PTree p(char_set_size, block_size, ' ');
-    PTree q(char_set_size, block_size, ' ');
+    CountTree p(char_set_size, block_size, ' ');
+    CountTree q(char_set_size, block_size, ' ');
 
     p.addStr("thi");
     q.addStr("tha");
@@ -80,10 +80,10 @@ TEST(PTree, MergeTreeSmall) {
     EXPECT_EQ(1, p.getCountAt("tha", 2));
 }
 
-TEST(PTree, AddLongStr) {
+TEST(CountTree, AddLongStr) {
     int64_t block_size = 3;
     int64_t char_set_size = 95;
-    PTree p(char_set_size, block_size, ' ');
+    CountTree p(char_set_size, block_size, ' ');
 
     p.addLongStr("abcd", 4);
 
@@ -94,8 +94,8 @@ TEST(PTree, AddLongStr) {
     EXPECT_EQ(1, p.getCountAt("bc", 1));
 }
 
-TEST(PTree, IngestDataNoNewline) {
-    PTree p(95, 3);
+TEST(CountTree, IngestDataNoNewline) {
+    CountTree p(95, 3);
 
     const char test[] = "abcd";
     p.ingestData(&test[0], &test[0] + 4);
@@ -110,8 +110,8 @@ TEST(PTree, IngestDataNoNewline) {
     EXPECT_EQ(1, p.getCountAt("bcd", 2));
 }
 
-TEST(PTree, IngestDataMultiple) {
-    PTree p(95, 3);
+TEST(CountTree, IngestDataMultiple) {
+    CountTree p(95, 3);
 
     const char test[] = "this\nthat\n";
     p.ingestData(&test[0], &test[0] + 9);
@@ -122,8 +122,8 @@ TEST(PTree, IngestDataMultiple) {
     EXPECT_EQ(1, p.getCountAt("tha", 2));
 }
 
-TEST(PTree, IngestFileMultiThreadSplit) {
-    PTree p(95, 3);
+TEST(CountTree, IngestFileMultiThreadSplit) {
+    CountTree p(95, 3);
 
     std::istringstream test("this\nthat\n");
     p.ingestFileMultiThread(test, 2);
@@ -134,8 +134,8 @@ TEST(PTree, IngestFileMultiThreadSplit) {
     EXPECT_EQ(1, p.getCountAt("tha", 2));
 }
 
-TEST(PTree, IngestFileMultiThreadExtra) {
-    PTree p(95, 3);
+TEST(CountTree, IngestFileMultiThreadExtra) {
+    CountTree p(95, 3);
 
     std::istringstream test("this\nthat\n");
     p.ingestFileMultiThread(test, 3);

@@ -3,20 +3,20 @@
 
 #include "gtest/gtest.h"
 
-#include "PTree.h"
+#include "CountTree.h"
 #include "Predictor.h"
 
 TEST(Predictor, GetCharsTest) {
     int64_t block_size = 4;
     int64_t char_set_size = 95;
-    PTree p(char_set_size, block_size, ' ');
+    CountTree p(char_set_size, block_size, ' ');
 
     p.addStr("node");
     p.addStr("nope");
     p.addStr("nail");
 
     Predictor pred(char_set_size, block_size);
-    pred.genFromPTree(p);
+    pred.genFromCountTree(p);
 
     // add 1 to make it a c string terminated by \0
     char o[block_size + 1] = {0};

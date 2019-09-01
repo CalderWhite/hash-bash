@@ -7,13 +7,13 @@
 #include <boost/iostreams/copy.hpp>
 #include <boost/iostreams/filter/gzip.hpp>
 
-#include "PTree.h"
+#include "CountTree.h"
 #include "Predictor.h"
 #include "utils.h"
 
 Predictor::Predictor(int64_t ss, int64_t bs) : BigTree(ss, bs) {}
 
-void Predictor::genFromPTree(PTree p) {
+void Predictor::genFromCountTree(CountTree p) {
     int index_tracker[m_char_set_size] = {0};
 
     // set starting values. keeps track of which characters are at what index

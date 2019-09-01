@@ -3,21 +3,21 @@
 
 #include "gtest/gtest.h"
 
-#include "PTree.h"
+#include "CountTree.h"
 #include "Predictor.h"
 #include "PredictorCounter.h"
 
 TEST(PredictorCounter, GetOffsetSameGuessLength) {
     int char_set_size = 95;
     int block_size = 4;
-    PTree p(char_set_size, block_size, ' ');
+    CountTree p(char_set_size, block_size, ' ');
 
     p.addStr("node");
     p.addStr("nope");
     p.addStr("nail");
 
     Predictor pred(char_set_size, block_size);
-    pred.genFromPTree(p);
+    pred.genFromCountTree(p);
 
     // do not be confused: we are using block_size for the guess_length
     PredictorCounter pc(pred, block_size, 1);
@@ -29,12 +29,12 @@ TEST(PredictorCounter, GetOffsetSameGuessLength) {
 TEST(PredictorCounter, GetOffset) {
     int char_set_size = 95;
     int block_size = 4;
-    PTree p(char_set_size, block_size, ' ');
+    CountTree p(char_set_size, block_size, ' ');
 
     p.addStr("bbbb");
 
     Predictor pred(char_set_size, block_size);
-    pred.genFromPTree(p);
+    pred.genFromCountTree(p);
     PredictorCounter pc(pred, 7, 1);
 
     EXPECT_EQ(0, pc.getOffset("bbbbbbb"));

@@ -6,7 +6,7 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 
-#include "PTree.h"
+#include "CountTree.h"
 #include "BigTree.h"
 
 /**
@@ -19,10 +19,10 @@ public:
     Predictor(int64_t ss, int64_t bs);
 
     /**
-     * Builds a predictor from a PTree. The PTree parameter is deliberately copied 
-     * as the sorting algorithm is in place and changes the values of the PTree.
+     * Builds a predictor from a CountTree. The CountTree parameter is deliberately copied 
+     * as the sorting algorithm is in place and changes the values of the CountTree.
      */
-    void genFromPTree(PTree p);
+    void genFromCountTree(CountTree p);
 
     /**
      * Serialization helper function. For more extensibility,

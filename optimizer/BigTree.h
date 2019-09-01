@@ -7,7 +7,7 @@
 #include "BigTreeException.h"
 
 /**
- * Although templating is discouraged, the overlap between the Predictor and PTree was too great.
+ * Although templating is discouraged, the overlap between the Predictor and CountTree was too great.
  * Thus, a base "BigTree" template class was created. This contains most of the code for general operations
  * on the tree to provide a layer of abstraction above the 2d array representing the tree, indexed by a character string
  */

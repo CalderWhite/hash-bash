@@ -7,7 +7,7 @@
 #include "BigTree.h"
 
 /**
- * A PTree contains the counts of each character after a certain string of characters that come before it.
+ * A CountTree contains the counts of each character after a certain string of characters that come before it.
  * This is found by ingesting large amounts of strings into the class using addStr().
  *
  * Further Explanation:
@@ -20,18 +20,18 @@
  *          |
  *          +-- y(1) --> s(1)
  *
- * This structure is similar to a trie. However, in a PTree, all of the different possibilities are stored.
+ * This structure is similar to a trie. However, in a CountTree, all of the different possibilities are stored.
  *
  * Parallelization:
  * The class is not designed to be operated on in parallel. However, this can be accomplished with
  * processing sub-trees and then merging the gathered data with mergeTree().
- * i.e. : You have 1000 strings. In one thread you create a PTree and process 500. 
- *        In another you process the other 500. Then, you merge one into the other (or a main PTree).
+ * i.e. : You have 1000 strings. In one thread you create a CountTree and process 500. 
+ *        In another you process the other 500. Then, you merge one into the other (or a main CountTree).
  *        This final tree has the same result as processing the 1000 strings serially in 1 thread.
  */
-class PTree : public BigTree<int> {
+class CountTree : public BigTree<int> {
 public:
-    PTree(int64_t char_set_size, int64_t block_size, char ascii_start=' ');
+    CountTree(int64_t char_set_size, int64_t block_size, char ascii_start=' ');
 
     /**
      * Increments the count of each character based on the tree's trie-like structure.
@@ -44,9 +44,9 @@ public:
     void addLongStr(const char s[], int len);
 
     /**
-     * Merges the current count tree with the inputted PTree's count tree.
+     * Merges the current count tree with the inputted CountTree's count tree.
      */
-    void mergeTree(PTree const& p);
+    void mergeTree(CountTree const& p);
 
     /**
      * Finds the count of the final node in the string's tree
@@ -90,5 +90,5 @@ private:
     /**
      * This is the sub function that will be called to ingest data in a single thread.
      */
-    static void createIngestThread(const char* start, const char* stop, PTree* ptree);
+    static void createIngestThread(const char* start, const char* stop, CountTree* ptree);
 };

@@ -107,14 +107,15 @@ cc_test(
 # ============= optimize binary =============
 cc_binary(
     name = "optimizer",
-    srcs = ["optimizer.cpp"],
+    srcs = ["optimizer.cpp", "OptimizerOptions.h"],
     copts = ["-std=c++11", "-Iexternal/gtest/include"],
     deps = [
+        ":CountTree",
         ":Predictor",
         ":PredictorCounter",
-        "@boost//:multiprecision",
+        "@boost//:program_options",
     ],
-    data = [
-        "//data:crackstation-human-only.txt",
-    ],
+    #data = [
+    #    "//data:crackstation-human-only.txt",
+    #],
 )

@@ -11,7 +11,7 @@
 #include "Predictor.h"
 #include "utils.h"
 
-Predictor::Predictor(int64_t ss, int64_t bs) : BigTree(ss, bs) {}
+Predictor::Predictor(int64_t ss, int64_t bs, char as) : BigTree(ss, bs, as) {}
 
 void Predictor::genFromCountTree(CountTree p) {
     int index_tracker[m_char_set_size] = {0};

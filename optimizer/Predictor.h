@@ -16,7 +16,7 @@
  */
 class Predictor : public BigTree<char> {
 public:
-    Predictor(int64_t ss, int64_t bs);
+    Predictor(int64_t ss, int64_t bs, char as = ' ');
 
     /**
      * Builds a predictor from a CountTree. The CountTree parameter is deliberately copied 

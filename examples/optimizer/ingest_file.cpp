@@ -1,7 +1,7 @@
 #include <fstream>
 #include <chrono>
 
-#include "optimizer/PTree.h"
+#include "optimizer/CountTree.h"
 #include "optimizer/Predictor.h"
 
 std::chrono::high_resolution_clock::time_point getTime() {
@@ -18,7 +18,7 @@ int main() {
     std::ifstream infile("data/crackstation-human-only.txt");
     const long block_size = 4;
     const long char_set_size = 95;
-    PTree p(char_set_size, block_size, ' ');
+    CountTree p(char_set_size, block_size, ' ');
 
     if (infile.is_open()) {
         std::cout << "Reading data file...\n";
@@ -35,7 +35,7 @@ int main() {
     std::cout << "Generating Predictor...\n";
 
     Predictor pred(char_set_size, block_size);
-    pred.genFromPTree(p);
+    pred.genFromCountTree(p);
 
     std::cout << "Writing out compressed stream...\n";
     pred.serializeToFile("trained.dat.gz");
